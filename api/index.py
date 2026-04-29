@@ -3,7 +3,6 @@ from pydantic import BaseModel
 import requests
 from bs4 import BeautifulSoup
 import spacy
-import pandas as pd
 from collections import Counter
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
