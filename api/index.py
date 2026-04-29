@@ -88,23 +88,24 @@ async def start_crawling(request: CrawlRequest):
             })
 
     if not data_result:
-        raise HTTPException(status_code=400, detail="Tidak ada data yang berhasil di-crawl")
+            raise HTTPException(status_code=400, detail="Tidak ada data yang berhasil di-crawl")
 
-    # Simpan ke DataFrame
-    df = pd.DataFrame(data_result)
+    # 1. Olah data langsung tanpa DataFrame
+    # Kita melakukan pemetaan kolom (renaming) dan konversi tipe data sekaligus
+    data_dict = []
+    for item in data_result:
+        data_dict.append({
+            "rank": item["Rank"],
+            "url": item["URL"],
+            "total_entities": item["Total Entities"],
+            "top_keywords": str(item["Top Keywords/Entities"]) # Konversi list/tuple ke string
+        })
 
-    # 1. Kirim ke Supabase
-    df_supabase = df.copy()
-    column_mapping = {
-        "Rank": "rank", "URL": "url", 
-        "Total Entities": "total_entities", 
-        "Top Keywords/Entities": "top_keywords"
-    }
-    df_supabase = df_supabase.rename(columns=column_mapping)
-    df_supabase['top_keywords'] = df_supabase['top_keywords'].astype(str)
-    
-    data_dict = df_supabase[["rank", "url", "total_entities", "top_keywords"]].to_dict(orient='records')
-    supabase.table("search_results").insert(data_dict).execute()
+    # 2. Kirim ke Supabase
+    try:
+        supabase.table("search_results").insert(data_dict).execute()
+    except Exception as e:
+        print(f"Gagal mengirim ke Supabase: {e}")
 
     # 2. Kirim ke GSheet (Gunakan variabel environment untuk JSON Creds)
     # Catatan: Di Vercel, lebih baik simpan isi JSON creds di Env Var
