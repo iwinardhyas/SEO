@@ -10,14 +10,14 @@ from oauth2client.service_account import ServiceAccountCredentials
 from supabase import create_client, Client
 import json
 import os
-import os
+
 from dotenv import load_dotenv # Tambahkan ini
 
 # Muat variabel dari file .env
 load_dotenv() 
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+SUPABASE_URL = os.getenv("VITE_SUPABASE_URL")
+SUPABASE_KEY = os.getenv("VITE_SUPABASE_KEY")
 SERP_API_KEY = os.getenv("SERP_API_KEY")
 # ... sisanya sama
 

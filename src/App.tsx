@@ -42,13 +42,13 @@ export default function App() {
       
       if (result.status === 'success') {
         setResults(result.data); // Update tabel dengan data baru
-        alert("Selesai! Data sudah masuk ke Supabase & GSheet.");
+        alert("finish! Data to Supabase & GSheet.");
       } else {
-        alert("Gagal melakukan crawling.");
+        alert("Failed crawling crawling.");
       }
     } catch (err) {
-      console.error("Error saat crawl:", err);
-      alert("Terjadi kesalahan saat menghubungi Backend.");
+      console.error("Error while crawl:", err);
+      alert("There are errors in Backend.");
     } finally {
       setLoading(false);
     }
